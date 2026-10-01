@@ -932,6 +932,13 @@ string ClassFlowControll::getNumbersName()
 
 string ClassFlowControll::getJSON()
 {
+    /* The REST API is reachable as soon as the flow task exists, which can be
+       well before the flow itself is initialized (e.g. while flow init is
+       delayed after a panic). Callers treat an empty string as "no data yet". */
+    if (!flowpostprocessing) {
+        return "";
+    }
+
     return flowpostprocessing->GetJSON();
 }
 
