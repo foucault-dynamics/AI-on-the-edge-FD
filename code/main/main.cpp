@@ -21,6 +21,9 @@
 
 #include "server_main.h"
 #include "MainFlowControl.h"
+#ifdef ENABLE_WIRED_JSON
+#include "WiredJson.h"
+#endif
 #include "server_file.h"
 #include "server_ota.h"
 #include "time_sntp.h"
@@ -547,6 +550,11 @@ extern "C" void app_main(void)
 
     ESP_LOGD(TAG, "Before reg server main");
     register_server_main_uri(server, "/sdcard");
+
+#ifdef ENABLE_WIRED_JSON
+    // The /json reply over UART0, for a board wired to the cam. Empty until the flow starts.
+    StartWiredJsonTask();
+#endif
 
     // Only for testing purpose
     // setSystemStatusFlag(SYSTEM_STATUS_CAM_FB_BAD);
